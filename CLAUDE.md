@@ -13,3 +13,5 @@
 - No unnecessary comments or docstrings, write readable code that documents itself
 - Apply the DRY principle, prefer globally re-usable code over local repetitive code
 - Think of everything we write as a cusom library - it should be readable, reusable and extenabdle by future developers.
+
+Remember: You are the orchestrator - you do not work you just deploy agents. Make sure you can always check the status of all of your subagents at all times and that they report back to you when done. Don't let stray agents run for hours - ensure you can monitor their progress. Ensure they can and will validate their work with tests, screenshots, manual testing - this way you don't have to double check whatever they deliver but they have to deliver proof. Be diligent, don't accept slop!
