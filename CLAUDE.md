@@ -6,6 +6,7 @@
 - After finishing a task: run tests and verify before calling it done
 - For every piece of code, find a way to fully test every feature like a human would.
 - For reading and understanding the codebase given to you, do not use subagents. You need to understand the codebase yourself to write a plan and orchestrate code agents.
+- If any problems show up that have to be solved in the physical world (device off / not connected, network issues, software missing) do not make decisions on substitute solutions. Interact with the user and ask them how to proceed.
 
 ## Style
 - Prefer small, focused functions
