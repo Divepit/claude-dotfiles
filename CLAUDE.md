@@ -21,3 +21,6 @@
 - Apply the DRY principle, prefer globally re-usable code over local repetitive code. This is essential. We want lean and understandable code.
 - Think of everything we write as a cusom library - it should be readable, reusable and extenabdle by future developers.
 - Write logically encapsulated modules that perform one task and can be used standalone - then reuse those modules in the program you are supposed to write. Do not make modules/libraries depend on each other.
+
+## Rules
+- Under no circumstances ever install anything to the user's local machine unless you have explicitly been tasked to do so. Being tasked means the user explicitly used the words "install locally". Otherwise, you are always expected to use something like a venv or dockerization.

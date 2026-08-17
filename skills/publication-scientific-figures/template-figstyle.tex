@@ -1,0 +1,79 @@
+% TEMPLATE (instance from an avionics paper) — rename, and adapt class names/
+% colors to YOUR document's one encoded dimension; keep the structure and rules.
+% avionics-figs.tex — shared style for all system architecture figures
+%
+% ============================ STANDARD SCHEMA ============================
+% Every element of every figure fills the SAME blanks; unknown = "n/a".
+% An asterisk (*) marks any value sourced only from design-phase documents.
+%
+%   COMPUTE CONTAINER : line1 role (bold) + (xN) | line2 part | line3 clock/cores/OS
+%                       + algorithm chips inside
+%   SENSOR / ACTUATOR : line1 type + (xN) | line2 part | line3 key spec
+%                       | line4 sample/output rate
+%   ALGORITHM CHIP    : line1 function | line2 rate (or "rate n/a")
+%   EDGE              : protocol only (or "n/a")  — rates live in the boxes
+%   MULTIPLICITY N>1  : "(xN)" in line1 AND stacked copy-shadow behind the box
+%
+% Fill encodes the part class ONLY (colorblind-validated, CVD worst pair
+% dE 15.3 deutan / 13.9 tritan, normal 15.7; lightness-stepped ~L90/84/70 so
+% IEEE's automatic grayscale print conversion keeps them distinct):
+%   clsCots  = COTS part | clsHirel = automotive-grade part
+%   clsRad   = radiation-tolerant part
+%   white + DASHED border = radiation tolerance level n/a
+% Class assignment per box must be sourced (see the system's notes file).
+% Algorithm chips: gray title compartment (never a class color).
+% On-graphic text beyond the legend: ONLY the asterisk note. Everything else
+% ((xN) = quantity, n/a = not stated in sources, SEL-screening caveat) goes in
+% the figure caption in the manuscript.
+% =========================================================================
+\usetikzlibrary{positioning,fit,arrows.meta,calc,backgrounds,shapes.multipart}
+
+% Reliability-class fills — colorblind-validated (dataviz six-checks: CVD worst
+% adjacent pair dE 15.3 deutan / 13.9 tritan, normal-vision 15.7) AND stepped in
+% lightness so IEEE's automatic grayscale print conversion keeps them distinct.
+\definecolor{clsCots}{HTML}{CDE2FB}   % consumer COTS          (light blue,   ~L90)
+\definecolor{clsHirel}{HTML}{F3C37C}  % hi-rel screened COTS   (light orange, ~L84)
+\definecolor{clsRad}{HTML}{A9A3E0}    % radiation tolerant     (light violet, ~L70)
+% darker step of the SAME hue for title compartments (sequential step, grayscale-safe)
+\definecolor{clsCotsT}{HTML}{9EC5F4}
+\definecolor{clsHirelT}{HTML}{E5A44E}
+\definecolor{clsRadT}{HTML}{8B84CE}
+
+\tikzset{
+  % ---- compartmented (UML-class-style) boxes: title bar + body ----
+  % font floor: \scriptsize (7 pt) — nothing in a figure may be smaller
+  twopart/.style      = {rectangle split, rectangle split parts=2,
+                         draw, semithick, align=center,
+                         font=\scriptsize\sffamily, inner sep=2.5pt},
+  % sensors / actuators / simple devices: pick one class
+  boxcots/.style      = {twopart, rectangle split part fill={clsCotsT, clsCots}},
+  boxhirel/.style     = {twopart, rectangle split part fill={clsHirelT, clsHirel}},
+  boxrad/.style       = {twopart, rectangle split part fill={clsRadT, clsRad}},
+  boxna/.style        = {twopart, dashed,
+                         rectangle split part fill={white, white}},
+  % algorithm chips: same compartment layout, neutral gray title, thin border
+  chip/.style         = {twopart, thin,
+                         rectangle split part fill={gray!25, white}},
+  % compute CONTAINER: fit node; title bar overlaid by \containertitle
+  container/.style    = {draw, semithick, inner sep=2.5mm},
+  ctitle/.style       = {font=\scriptsize\sffamily, align=center, inner sep=2pt},
+  % legend swatches
+  swatch/.style       = {draw, semithick, minimum width=7mm, minimum height=3.5mm},
+  % links
+  link/.style         = {semithick},
+  linkdir/.style      = {link, -{Stealth[length=1.6mm]}},
+  linkbi/.style       = {link, {Stealth[length=1.6mm]}-{Stealth[length=1.6mm]}},
+  lbl/.style          = {font=\scriptsize\sffamily, fill=white, inner sep=1pt,
+                         align=center},
+  % annotations
+  note/.style         = {font=\scriptsize\sffamily\itshape, align=center},
+}
+
+% \containertitle{<container node>}{<title text node>}{<title color>}
+% paints the title compartment of a fit-based container; call INSIDE the same
+% background scope, AFTER the container node.
+\newcommand{\containertitle}[3]{%
+  \fill[#3] ([shift={(0.2pt,-0.2pt)}]#1.north west)
+    rectangle ($(#1.east |- #2.south)+(-0.2pt,-0.9mm)$);
+  \draw[semithick] (#1.west |- #2.south) ++(0,-0.9mm)
+    -- ($(#1.east |- #2.south)+(0,-0.9mm)$);}
